@@ -20,3 +20,5 @@ Make sure to run **npm install** in the frontend directory to install require de
 Aftewards you are able to run the command **npm run dev** to start the server
 
 To exit out of the server you must use **Ctrl + C** in your terminal.
+
+test 2
