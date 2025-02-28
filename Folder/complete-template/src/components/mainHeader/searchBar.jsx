@@ -44,7 +44,7 @@ function SearchBar() {
 						},
 					},
 				}}
-				placeholder="Buscar"
+				placeholder="Search"
 				variant="outlined"
 				fullWidth
 			/>
@@ -60,7 +60,7 @@ function SearchBar() {
 					borderColor: 'primary.light',
 					fontSize: '13px',
 				}}
-				placeholder="Buscar"
+				placeholder="Search"
 				endAdornment={
 					<InputAdornment position="end">
 						<IconButton
