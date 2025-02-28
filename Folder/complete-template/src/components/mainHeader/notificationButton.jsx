@@ -70,7 +70,7 @@ function NotificationsButton() {
 							spacing={1}
 							divider={<Divider orientation="vertical" flexItem />}
 						>
-							<Typography variant="subtitle1">Notificaciones</Typography>
+							<Typography variant="subtitle1">Notifications</Typography>
 							<Box
 								component="span"
 								bgcolor="secondary.main"

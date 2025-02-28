@@ -180,7 +180,7 @@ function UserMenu({ handleClose }) {
 					my: 1,
 				}}
 			/>
-			<MenuItem onClick={handleClose} to="/profile" component={RouterLink}>
+			<MenuItem onClick={handleClose} to="/pages/settings" component={RouterLink}>
 				<ListItemIcon>
 					<Person2OutlinedIcon fontSize="small" />
 				</ListItemIcon>
@@ -193,7 +193,7 @@ function UserMenu({ handleClose }) {
 				</ListItemIcon>
 				Account Settings
 			</MenuItem>
-			<MenuItem onClick={handleClose} to="/" component={RouterLink}>
+			<MenuItem onClick={handleClose} to="/pages/settings?section=billing" component={RouterLink}>
 				<ListItemIcon>
 					<PaymentOutlinedIcon fontSize="small" />
 				</ListItemIcon>
