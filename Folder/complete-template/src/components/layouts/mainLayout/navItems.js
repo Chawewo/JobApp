@@ -24,31 +24,10 @@ import WebOutlinedIcon from '@mui/icons-material/WebOutlined';
 const NAV_LINKS_CONFIG = [
 	{
 		id: uuid(),
-		type: 'group',
+		type: 'item',
 		title: 'Home Page',
-		Icon: BarChartOutlinedIcon,
-		menuChildren: [
-			{
-				title: 'Dashboard01',
-				href: '/pages/wip',
-			},
-			{
-				title: 'Dashboard02',
-				href: '/dashboards/dashboard2',
-			},
-			{
-				title: 'Dashboard03',
-				href: '/dashboards/dashboard3',
-			},
-			{
-				title: 'Dashboard04',
-				href: '/dashboards/dashboard4',
-			},
-			{
-				title: 'Dashboard05',
-				href: '/dashboards/dashboard5',
-			},
-		],
+		Icon: AccountCircleOutlinedIcon,
+		href: '/',
 	},
 	{
 		id: uuid(),
