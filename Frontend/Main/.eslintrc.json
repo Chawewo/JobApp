@@ -36,7 +36,6 @@
 		}
 	},
 	"rules": {
-		"prettier/prettier": "error",
 		"no-console": 0,
 		"no-unused-vars": "warn",
 		"react/prop-types": 0,
@@ -45,6 +44,12 @@
 		"react/no-array-index-key": 0,
 		"no-shadow": 0,
 		"allowTernary": 0,
-		"import/no-extraneous-dependencies": 0
+		"import/no-extraneous-dependencies": 0,
+		"prettier/prettier": [
+			"error",
+			{
+			  "endOfLine": "auto"
+			}
+		  ]
 	}
 }
