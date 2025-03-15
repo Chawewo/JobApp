@@ -15,11 +15,10 @@ import calcLayoutHeight from '@/utils/helpers/layoutHeight';
 import { useState } from 'react';
 
 function JobApp() {
-  // State for managing the dialog
   const [selectedJob, setSelectedJob] = useState(null);
   const [open, setOpen] = useState(false);
 
-  // Mock data to simulate backend response
+  // Dummy data
   const jobsData = [
     {
       id: 1,
@@ -51,7 +50,6 @@ function JobApp() {
     }
   ];
 
-  // Function to format date
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);

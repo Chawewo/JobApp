@@ -45,7 +45,7 @@ function Footer() {
 									endAdornment: (
 										<InputAdornment position="end">
 											<Button type="submit" variant="contained" disableElevation>
-												Suscribirse
+												Subscribe
 											</Button>
 										</InputAdornment>
 									),
