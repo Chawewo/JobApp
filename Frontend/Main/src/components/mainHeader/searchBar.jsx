@@ -1,58 +1,54 @@
 import { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
-import InputAdornment from '@mui/material/InputAdornment';
+import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-// Icons
+import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
 
 function SearchBar({ onSearch }) {
   const [query, setQuery] = useState('');
 
-  const handleChange = (event) => {
-    const newQuery = event.target.value;
-    setQuery(newQuery);
-    onSearch(newQuery); // Send query to parent component (JobApp)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(query);
   };
 
   return (
-    <Stack component="form">
+    <Box 
+      component="form" 
+      onSubmit={handleSubmit}
+      sx={{ 
+        display: 'flex', 
+        alignItems: 'center',
+        width: '100%', 
+        maxWidth: '600px',
+        margin: '0 auto'
+      }}
+    >
       <TextField
-        size="small"
-        color="primary"
+        fullWidth
+        variant="outlined"
+        placeholder="Search for job titles..."
         value={query}
-        onChange={handleChange}
+        onChange={(e) => setQuery(e.target.value)}
         InputProps={{
-          name: 'search',
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton color="primary">
-                <SearchIcon />
-              </IconButton>
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
             </InputAdornment>
           ),
-          sx: {
-            pr: 0,
-            bgcolor: 'background.paper',
-            borderRadius: '20px',
-            overflow: 'hidden',
-            height: 40,
-          },
-          inputProps: {
-            sx: {
-              transition: '0.3s padding',
-              pl: 1.5,
-              '&:not(:placeholder-shown), &:focus': {
-                pl: 3,
-              },
-            },
-          },
         }}
-        placeholder="Search jobs by title..."
-        variant="outlined"
-        fullWidth
+        sx={{ mr: 1 }}
       />
-    </Stack>
+      <Button 
+        type="submit" 
+        variant="contained" 
+        color="primary"
+        disabled={!query.trim()}
+      >
+        Search
+      </Button>
+    </Box>
   );
 }
 
