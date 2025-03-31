@@ -21,7 +21,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
 
 // assets
-import logo from '@/assets/images/logo/png/Color_logo_nobg.png';
+import logo from '@/assets/images/logo/png/Color_logotext2_nobg.png';
 import Google from '@/assets/icons/social-google.svg';
 
 function LoginPage() {
@@ -43,10 +43,10 @@ function LoginPage() {
 				<Box component="img" src={logo} width="80%" mx="auto" alt="slim logo" />
 				<div>
 					<Typography variant="h1" fontWeight="light">
-						¡Bienvenido!
+						Welcome!
 					</Typography>
 					<Typography variant="body2" color="textSecondary">
-						Inicia sesión para poder continuar.
+						Please login to continue
 					</Typography>
 				</div>
 				<Button
@@ -77,19 +77,19 @@ function LoginPage() {
 						src={Google}
 						alt="google"
 					/>
-					Ingresar con Google
+					Sign in with Google
 				</Button>
 				<Divider>
 					<Chip label="OR" variant="outlined" size="small" />
 				</Divider>
 
 				<Typography variant="body2" color="textSecondary">
-					Ingresa con tu usuario o correo de registro.
+					Login with username or email.
 				</Typography>
 				<LoginForm />
 
 				<Button variant="outlined" fullWidth color="primary" to="/pages/signup" component={RouterLink}>
-					Registrarse
+					Register
 				</Button>
 				{/* <Typography>
 					¿No tienes cuenta?{' '}
@@ -109,7 +109,7 @@ function LoginPage() {
 					component={RouterLink}
 					color="tertiary.main"
 				>
-					¿Has olvidado tu contraseña?
+					Forgot your password?
 				</Link>
 			</Stack>
 		</Card>
@@ -139,7 +139,7 @@ function LoginForm() {
 				color="primary"
 				autoFocus
 				name="nickname"
-				label="Usuario"
+				label="Username"
 				margin="normal"
 				variant="outlined"
 				fullWidth
@@ -157,7 +157,7 @@ function LoginForm() {
 				name="password"
 				type={showPassword ? 'text' : 'password'}
 				margin="normal"
-				label="Contraseña"
+				label="Password"
 				variant="outlined"
 				InputProps={{
 					startAdornment: (
@@ -171,7 +171,7 @@ function LoginForm() {
 			<Stack direction="row" justifyContent="space-between">
 				<FormControlLabel
 					control={<Switch defaultChecked size="small" color="primary" />}
-					label="Recordarme"
+					label="Remember Me"
 					sx={{
 						ml: 0.5,
 					}}
@@ -181,12 +181,12 @@ function LoginForm() {
 						color="secondary"
 						name="showPassword"
 						inputProps={{
-							'aria-label': 'Mostrar/Ocultar contraseña',
+							'aria-label': 'Show Password',
 							id: 'showPassword',
 						}}
 						onClick={handleClickShowPassword}
 					/>
-					Mostrar contraseña
+					Show Password
 				</Typography>
 			</Stack>
 
@@ -222,7 +222,7 @@ function LoginForm() {
 				fullWidth
 				color="primary"
 			>
-				Iniciar Sesión
+				Login
 			</Button>
 		</Box>
 	);
