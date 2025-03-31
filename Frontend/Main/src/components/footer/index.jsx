@@ -86,35 +86,6 @@ function Footer() {
 							</Stack>
 						</Stack>
 					</Grid>
-					<Grid item xs={12} sm={6} md={6}>
-						<Stack spacing={1}>
-							<Typography variant="h6" my={1}>
-								CONTACTS
-							</Typography>
-							<ContactLink Icon={LocalPhoneOutlinedIcon} text="+00 000 000 00 00" />
-							<ContactLink Icon={EmailOutlinedIcon} text="Emailofalltime@gmail.com" />
-						</Stack>
-					</Grid>
-					<Grid item xs={12} sm={6} md={3}>
-						<Stack spacing={1}>
-							<Typography variant="h6" my={1}>
-								TERMS OF USE
-							</Typography>
-							<FooterLink text="Filler Text" />
-							<FooterLink text="Filler Text" />
-							<FooterLink text="Filler Text" />
-						</Stack>
-					</Grid>
-					<Grid item xs={12} sm={6} md={3}>
-						<Stack spacing={1}>
-							<Typography variant="h6" my={1}>
-								FAQ
-							</Typography>
-							<FooterLink text="Filler Text" />
-							<FooterLink text="Filler Text" />
-							<FooterLink text="Filler Text" />
-						</Stack>
-					</Grid>
 				</Grid>
 
 				<Divider
