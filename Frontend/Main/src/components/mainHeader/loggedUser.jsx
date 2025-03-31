@@ -12,25 +12,18 @@ import MenuList from '@mui/material/MenuList';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 // Icons
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
-import SummarizeOutlinedIcon from '@mui/icons-material/SummarizeOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import DraftsOutlinedIcon from '@mui/icons-material/DraftsOutlined';
-import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+
 // assets
 import avatar2 from '@/assets/images/avatars/avatar_13.jpg';
 
 // Components
-import NotificationsButton from './notificationButton';
 
 function LoggedUser() {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -65,12 +58,6 @@ function LoggedUser() {
 				<UserMenu handleClose={handleClose} />
 			</Menu>
 			<Stack height="100%" direction="row" flex={1} justifyContent="flex-end" alignItems="center" spacing={0}>
-				<NotificationsButton />
-				<IconButton size="small">
-					<Badge color="tertiary" overlap="rectangular" variant="dot">
-						<CommentOutlinedIcon color="primary" fontSize="small" />
-					</Badge>
-				</IconButton>
 				<ButtonBase
 					onClick={handleClick}
 					variant="outlined"
@@ -162,18 +149,6 @@ function UserMenu({ handleClose }) {
 				Messages
 				<ListBadge color="success.main" count={5} />
 			</MenuItem>
-			<MenuItem onClick={handleClose} to="/" component={RouterLink}>
-				<ListItemIcon>
-					<TaskOutlinedIcon fontSize="small" />
-				</ListItemIcon>
-				Tasks <ListBadge color="error.main" count={23} />
-			</MenuItem>
-			<MenuItem onClick={handleClose} to="/" component={RouterLink}>
-				<ListItemIcon>
-					<CommentOutlinedIcon fontSize="small" />
-				</ListItemIcon>
-				Comments <ListBadge color="warning.main" count={11} />
-			</MenuItem>
 			<Divider
 				sx={{
 					borderColor: 'primary.light',
@@ -186,24 +161,11 @@ function UserMenu({ handleClose }) {
 				</ListItemIcon>
 				Profile
 			</MenuItem>
-
 			<MenuItem onClick={handleClose} to="/pages/settings" component={RouterLink}>
 				<ListItemIcon>
 					<SettingsOutlinedIcon fontSize="small" />
 				</ListItemIcon>
 				Account Settings
-			</MenuItem>
-			<MenuItem onClick={handleClose} to="/pages/settings?section=billing" component={RouterLink}>
-				<ListItemIcon>
-					<PaymentOutlinedIcon fontSize="small" />
-				</ListItemIcon>
-				Payments
-			</MenuItem>
-			<MenuItem onClick={handleClose} to="/" component={RouterLink}>
-				<ListItemIcon>
-					<SummarizeOutlinedIcon fontSize="small" />
-				</ListItemIcon>
-				Projects
 			</MenuItem>
 			<Divider
 				sx={{
@@ -211,12 +173,6 @@ function UserMenu({ handleClose }) {
 					my: 1,
 				}}
 			/>
-			<MenuItem onClick={handleClose} component={RouterLink} to="/">
-				<ListItemIcon>
-					<LockPersonOutlinedIcon fontSize="small" />
-				</ListItemIcon>
-				Lock Account
-			</MenuItem>
 			<MenuItem onClick={handleClose} component={RouterLink} to="/">
 				<ListItemIcon>
 					<ExitToAppIcon fontSize="small" />
