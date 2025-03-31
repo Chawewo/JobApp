@@ -17,7 +17,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 
 // assets
-import logo from '@/assets/images/logo/png/Color_logo_nobg.png';
+import logo from '@/assets/images/logo/png/Color_logotext2_nobg.png';
 import Google from '@/assets/icons/social-google.svg';
 
 function SignupPage() {
