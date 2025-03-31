@@ -49,9 +49,19 @@ exports.searchJobs = async (req, res) => {
           const parsedData = JSON.parse(data);
           console.log('Parsed API response:', JSON.stringify(parsedData, null, 2)); // Log parsed response
           
-          // Check if we have response data in the expected format
-          if (parsedData.success && parsedData.response && Array.isArray(parsedData.response)) {
-            const formattedJobs = parsedData.response.map(job => ({
+          if (parsedData.success && parsedData.response) {
+            // Flatten the response if it's nested in another array
+            let extractedJobs = Array.isArray(parsedData.response[0]) ? parsedData.response.flat() : parsedData.response;
+          
+            console.log('Extracted jobs:', JSON.stringify(extractedJobs, null, 2)); // Debugging log
+          
+            // Ensure extractedJobs is an array before mapping
+            if (!Array.isArray(extractedJobs) || extractedJobs.length === 0) {
+              console.log('No jobs found in API response');
+              return res.json({ success: false, message: 'No jobs found' });
+            }
+          
+            const formattedJobs = extractedJobs.map(job => ({
               id: job.jobPostingUrl?.split('/view/')[1]?.split('/?')[0] || Math.random().toString(36).substring(7),
               title: job.title || 'Unknown Position',
               company: job.companyName || 'Unknown Company',
@@ -61,13 +71,11 @@ exports.searchJobs = async (req, res) => {
               employmentType: job.formattedEmploymentStatus || 'Not specified',
               applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#'
             }));
-            
+          
             console.log(`Returning ${formattedJobs.length} jobs`);
-            res.json({ 
-              success: true,
-              data: formattedJobs
-            });
-          } 
+            res.json({ success: true, data: formattedJobs });
+          }
+          
           // If the response structure is different than expected
           else {
             console.log('Unexpected API response structure');
