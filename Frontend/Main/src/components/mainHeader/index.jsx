@@ -34,7 +34,6 @@ function MainHeader() {
 						alt="logo"
 					/>
 				</Stack>
-				<SearchBar />
 				<LoggedUser />
 			</Stack>
 		</Box>

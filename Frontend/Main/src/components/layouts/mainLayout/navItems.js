@@ -93,10 +93,6 @@ const NAV_LINKS_CONFIG = [
 						title: 'Sign in',
 						href: '/pages/login',
 					},
-					{
-						title: 'Sign in Split',
-						href: '/pages/login/split',
-					},
 				],
 			},
 			{
@@ -107,10 +103,6 @@ const NAV_LINKS_CONFIG = [
 					{
 						title: 'Sign up',
 						href: '/pages/signup',
-					},
-					{
-						title: 'Sign up Split',
-						href: '/pages/signup/split',
 					},
 				],
 			},
