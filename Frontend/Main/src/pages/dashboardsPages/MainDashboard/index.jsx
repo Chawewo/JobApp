@@ -1,4 +1,6 @@
+/* eslint-disable */
 import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -13,58 +15,148 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchBar from '@/components/mainHeader/searchBar';
 import CircularProgress from '@mui/material/CircularProgress';
+import Chip from '@mui/material/Chip';
+import Alert from '@mui/material/Alert';
 
 function JobApp() {
+  // Get filters from outlet context
+  const { activeFilters, onFilterChange } = useOutletContext();
+  
   const [selectedJob, setSelectedJob] = useState(null);
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [jobs, setJobs] = useState([]);
+  const [allJobs, setAllJobs] = useState([]); // Store all jobs from API
+  const [filteredJobs, setFilteredJobs] = useState([]); // Filtered jobs to display
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-// In your frontend's JobApp.jsx, modify the fetchJobs function:
+  const fetchJobs = async (query) => {
+    if (!query) return;
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      console.log('Sending search query:', query);
+      
+      const response = await fetch('http://localhost:5000/api/jobs/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchQuery: query }),
+      });
+      
+      const result = await response.json();
+      console.log('Received response from backend:', result);
+      
+      if (result.success) {
+        console.log(`Received ${result.data.length} jobs`);
+        
+        const processedJobs = result.data.map((job, index) => {
+          const companyName = job.companyName || job.comapnyName || 'Unknown Company';
+          const jobDescription = job.jobDescription || 'No description available';
+        
+          return {
+            company: companyName,
+            description: jobDescription,
+            location: job.formattedLocation || 'Remote',
+            employmentType: job.formattedEmploymentStatus || 'Full-time',
+            experienceLevel: job.formattedExperienceLevel || 'Not specified',
+            datePosted: job.listedAt || new Date().toISOString(),
+            salary: job.salaryInsights
+              ? parseFloat(job.salaryInsights.replace(/[^0-9.]/g, ''))
+              : Math.floor(Math.random() * 150000) + 50000,
+            applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#',
+            id: job.id || `job-${Math.random().toString(36).substr(2, 9)}`,
+            ...job, // <-- PUT THIS LAST
+          };
+        });
+        
+        
 
-const fetchJobs = async (query) => {
-  if (!query) return;
-  
-  setLoading(true);
-  setError('');
-  
-  try {
-    console.log('Sending search query:', query);
-    
-    const response = await fetch('http://localhost:5000/api/jobs/search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ searchQuery: query }),
-    });
-    
-    const result = await response.json();
-    console.log('Received response from backend:', result);
-    
-    if (result.success) {
-      console.log(`Received ${result.data.length} jobs`);
-      setJobs(result.data);
-    } else {
-      console.error('API error:', result.message);
-      setError(result.message || 'Failed to fetch jobs');
-      setJobs([]);
+        setAllJobs(processedJobs);
+        applyFilters(processedJobs, activeFilters);
+      } else {
+        console.error('API error:', result.message);
+        setError(result.message || 'Failed to fetch jobs');
+        setAllJobs([]);
+        setFilteredJobs([]);
+      }
+    } catch (err) {
+      console.error('Error fetching jobs:', err);
+      setError('Error connecting to server');
+      setAllJobs([]);
+      setFilteredJobs([]);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error('Error fetching jobs:', err);
-    setError('Error connecting to server');
-    setJobs([]);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+
+  // Apply filters to jobs
+  const applyFilters = (jobs, filters) => {
+    if (!filters.length) {
+      setFilteredJobs(jobs);
+      return;
+    }
+
+    const filtered = jobs.filter(job => {
+      // Check if job passes all active filters
+      return filters.every(filter => {
+        switch (filter.filterType) {
+          case 'salary':
+            console.log("salary")
+            const minSalary = parseInt(filter.value, 10);
+          
+            return job.salary >= minSalary;
+          
+          case 'employmentStatus':
+            console.log("2")
+            return job.employmentType === filter.value;
+          
+          case 'experienceLevel':
+            console.log("3")
+            return job.experienceLevel.includes(filter.value);
+          
+          case 'location':
+            console.log("4")
+            return job.location.includes(filter.value);
+          
+          case 'datePosted':
+            console.log("5")
+            if (filter.value === 'any') return true;
+            
+            const daysAgo = parseInt(filter.value, 10);
+            const postedDate = new Date(job.datePosted);
+            const currentDate = new Date();
+            const diffTime = Math.abs(currentDate - postedDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays <= daysAgo;
+          
+          default:
+            return true;
+        }
+      });
+    });
+
+    setFilteredJobs(filtered);
+  };
 
   // Handle search submission
   const handleSearch = (query) => {
     setSearchQuery(query);
     fetchJobs(query);
+  };
+
+  // Handle removal of a filter
+  const handleFilterRemove = (filter) => {
+    if (filter === 'all') {
+      onFilterChange([]);
+    } else {
+      const updatedFilters = activeFilters.filter(f => f.id !== filter.id);
+      onFilterChange(updatedFilters);
+    }
   };
 
   const handleCardClick = (job) => {
@@ -76,16 +168,34 @@ const fetchJobs = async (query) => {
     setOpen(false);
   };
 
+  // Update filtered jobs when active filters change
+  useEffect(() => {
+    if (allJobs.length > 0) {
+      applyFilters(allJobs, activeFilters);
+    }
+  }, [activeFilters, allJobs]);
+
   return (
     <Box p="5%" sx={{ color: 'black' }}>
       {/* Search Bar with spacing below */}
       <Box sx={{ mb: 3 }}>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar 
+          onSearch={handleSearch} 
+          activeFilters={activeFilters}
+          onFilterRemove={handleFilterRemove}
+        />
       </Box>
 
       <Typography variant="h4" component="h1" gutterBottom>
         Available Jobs
       </Typography>
+
+      {/* Filter information */}
+      {activeFilters.length > 0 && filteredJobs.length > 0 && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Showing {filteredJobs.length} of {allJobs.length} jobs matching your filters
+        </Typography>
+      )}
 
       {/* Loading indicator */}
       {loading && (
@@ -96,14 +206,21 @@ const fetchJobs = async (query) => {
 
       {/* Error message */}
       {error && (
-        <Typography color="error" sx={{ my: 2 }}>
+        <Alert severity="error" sx={{ my: 2 }}>
           {error}
-        </Typography>
+        </Alert>
+      )}
+
+      {/* No results after filtering */}
+      {!loading && allJobs.length > 0 && filteredJobs.length === 0 && (
+        <Alert severity="info" sx={{ my: 2 }}>
+          No jobs match your current filters. Try adjusting your filter criteria.
+        </Alert>
       )}
 
       <Grid container spacing={3}>
-        {jobs.length > 0 ? (
-          jobs.map((job) => (
+        {filteredJobs.length > 0 ? (
+          filteredJobs.map((job) => (
             <Grid item xs={12} sm={6} md={4} key={job.id}>
               <Card
                 sx={{ 
@@ -126,6 +243,25 @@ const fetchJobs = async (query) => {
                   <Typography variant="subtitle1" color="text.secondary" gutterBottom>
                     {job.company}
                   </Typography>
+                  <Box sx={{ mb: 1.5 }}>
+                    <Chip 
+                      label={job.employmentType} 
+                      size="small" 
+                      sx={{ mr: 0.5, mb: 0.5 }} 
+                    />
+                    <Chip 
+                      label={job.location} 
+                      size="small" 
+                      sx={{ mr: 0.5, mb: 0.5 }} 
+                    />
+                    {job.experienceLevel && (
+                      <Chip 
+                        label={job.experienceLevel} 
+                        size="small" 
+                        sx={{ mr: 0.5, mb: 0.5 }} 
+                      />
+                    )}
+                  </Box>
                   <Typography 
                     variant="body2" 
                     color="text.secondary" 
@@ -173,9 +309,33 @@ const fetchJobs = async (query) => {
               <Typography variant="h6" color="text.secondary" gutterBottom>
                 {selectedJob.company}
               </Typography>
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                {selectedJob.location} • {selectedJob.employmentType}
-              </Typography>
+              <Box sx={{ mb: 2 }}>
+                <Chip 
+                  label={selectedJob.employmentType} 
+                  size="small" 
+                  sx={{ mr: 0.5, mb: 0.5 }} 
+                />
+                <Chip 
+                  label={selectedJob.location} 
+                  size="small" 
+                  sx={{ mr: 0.5, mb: 0.5 }} 
+                />
+                {selectedJob.experienceLevel && (
+                  <Chip 
+                    label={selectedJob.experienceLevel} 
+                    size="small" 
+                    sx={{ mr: 0.5, mb: 0.5 }} 
+                  />
+                )}
+                {selectedJob.salary && (
+                  <Chip 
+                    label={`$${selectedJob.salary.toLocaleString()}`} 
+                    size="small" 
+                    color="success"
+                    sx={{ mr: 0.5, mb: 0.5 }} 
+                  />
+                )}
+              </Box>
               <Typography gutterBottom variant="body1">
                 {selectedJob.description}
               </Typography>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import withScrollTopFabButton from '@hocs/withScrollTopFabButton';
 import WidthPageTransition from '@hocs/widthPageTransition';
@@ -19,26 +20,30 @@ import MainHeader from '@/components/mainHeader';
 import Navbar from '@/components/navbar';
 
 function FabButton() {
-	/* <Fab
-		size="small"
-		aria-label="scroll back to top"
-		sx={{ bgcolor: 'primary.light' }}
-	>
-		<KeyboardArrowUpIcon color="primary" />
-	</Fab> */
 	return (
 		<Fab size="small" aria-label="scroll back to top" color="primary">
 			<KeyboardArrowUpIcon />
 		</Fab>
 	);
 }
+
 function MainLayout({ container = 'lg', pb = true }) {
 	const location = useLocation();
 	const { pageTransitions } = useSelector(selectThemeConfig);
+	const [activeFilters, setActiveFilters] = useState([]);
+
+	const handleFilterChange = (filters) => {
+		setActiveFilters(filters);
+		// This will be passed down to any component that needs filter data
+		// For example to JobApp component
+	};
 
 	return (
 		<Box display="flex" minHeight="100vh" flexDirection="column">
-			<Header />
+			<Header 
+				activeFilters={activeFilters} 
+				onFilterChange={handleFilterChange} 
+			/>
 			<Container
 				maxWidth={container}
 				component="main"
@@ -51,10 +56,10 @@ function MainLayout({ container = 'lg', pb = true }) {
 			>
 				{pageTransitions ? (
 					<WidthPageTransition location={location.key}>
-						<Outlet />
+						<Outlet context={{ activeFilters, onFilterChange: handleFilterChange }} />
 					</WidthPageTransition>
 				) : (
-					<Outlet />
+					<Outlet context={{ activeFilters, onFilterChange: handleFilterChange }} />
 				)}
 			</Container>
 			{withScrollTopFabButton(FabButton)}
@@ -63,13 +68,18 @@ function MainLayout({ container = 'lg', pb = true }) {
 	);
 }
 
-function Header() {
+function Header({ activeFilters, onFilterChange }) {
 	const { stickyHeader } = useSelector(selectThemeConfig);
 
 	return (
 		<>
 			<MainHeader />
-			<Navbar navItems={navItems} position={stickyHeader ? 'sticky' : 'static'} />
+			<Navbar 
+				navItems={navItems} 
+				position={stickyHeader ? 'sticky' : 'static'} 
+				activeFilters={activeFilters}
+				onFilterChange={onFilterChange}
+			/>
 		</>
 	);
 }
