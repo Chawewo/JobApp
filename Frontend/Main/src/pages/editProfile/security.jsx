@@ -28,8 +28,6 @@ function Security() {
 	return (
 		<Stack spacing={6}>
 			<PassworSection />
-			<MultifactorSection />
-			<SessionsSection />
 		</Stack>
 	);
 }

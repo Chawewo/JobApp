@@ -94,28 +94,7 @@ function Footer() {
 						bgcolor: (theme) => theme.palette.secondary.main,
 					}}
 				/>
-				<Stack direction="row" justifyContent="space-between" alignItems="center">
-					<Typography variant="body1" textAlign="center">
-						Copyright 2023 © All Rights Reserved. Slim React MUI Template
-					</Typography>
-					<Typography variant="subtitle1" textAlign="center">
-						💻 - Construido por{' '}
-						<Link
-							underline="hover"
-							sx={{
-								cursor: 'pointer',
-							}}
-							href="https://antonioayola.netlify.app/"
-							target="_blank"
-							rel="noreferrer noopener"
-							fontWeight="medium"
-						>
-							@Antonio Ayola
-						</Link>{' '}
-						con 💛 &#x1F1F2;&#x1F1FD;
-						{/* Built by antonio ayola and contributors */}
-					</Typography>
-				</Stack>
+				
 			</Container>
 		</Box>
 	);

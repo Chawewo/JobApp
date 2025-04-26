@@ -43,13 +43,6 @@ const menuOptions = [
 	},
 	{
 		id: uuid(),
-		name: 'billing',
-		Icon: CreditCardIcon,
-		text: 'Billing',
-		renderSection: <Billing />,
-	},
-	{
-		id: uuid(),
 		name: 'security',
 		Icon: VpnKeyOutlinedIcon,
 		text: 'Security',

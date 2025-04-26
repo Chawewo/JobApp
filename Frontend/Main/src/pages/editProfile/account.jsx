@@ -179,11 +179,11 @@ function DeleteAccountSection() {
 		>
 			<CardHeader title="Delete Account" />
 			<Typography mb={2}>
-				To desactivate your account, first delete its resources. If you are the only owner of any teams, either
-				assign another owner or desactivate the team.
+				To deactivate your account, first delete its resources. If you are the only owner of any teams, either
+				assign another owner or deactivate the team.
 			</Typography>
 			<Button variant="outlined" color="error">
-				Desactivate Account
+				Deactivate Account
 			</Button>
 		</Stack>
 	);

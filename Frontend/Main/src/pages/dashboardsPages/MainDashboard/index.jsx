@@ -1,4 +1,5 @@
 /* eslint-disable */
+// dashboard index.jsx
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import Box from '@mui/material/Box';

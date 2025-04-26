@@ -3,7 +3,7 @@ const https = require('https');
 
 exports.searchJobs = async (req, res) => {
   try {
-    const { searchQuery, location = "United States", count = 10 } = req.body;
+    const { searchQuery, location = "United States", count = 15 } = req.body;
     
     if (!searchQuery) {
       return res.status(400).json({ success: false, message: 'Search query is required' });

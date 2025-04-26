@@ -28,14 +28,14 @@ function ProfileSection() {
 							<TextField label="First Name" variant="outlined" defaultValue="Elizabeth" fullWidth />
 						</Grid>
 						<Grid item xs={12} sm={6} md={6}>
-							<TextField label="Last Name" variant="outlined" defaultValue="Lumaad Olsen" fullWidth />
+							<TextField label="Last Name" variant="outlined" defaultValue="Da Baby" fullWidth />
 						</Grid>
 						<Grid item xs={12} sm={6} md={6}>
 							<TextField
 								type="email"
 								label="Account Email"
 								variant="outlined"
-								defaultValue="demo@sample.com"
+								defaultValue="testing@test.com"
 								fullWidth
 							/>
 						</Grid>
@@ -43,7 +43,7 @@ function ProfileSection() {
 							<TextField label="Phone Number" variant="outlined" defaultValue="000-00-00-00" fullWidth />
 						</Grid>
 						<Grid item xs={12} sm={6} md={6}>
-							<TextField label="Company Name" variant="outlined" defaultValue="company.ltd" fullWidth />
+							<TextField label="Company Name" variant="outlined" defaultValue="Enter Company Name" fullWidth />
 						</Grid>
 						<Grid item xs={12} sm={6} md={6}>
 							<TextField
@@ -57,7 +57,7 @@ function ProfileSection() {
 						<Grid item xs={12} sm={6} md={6}>
 							<Stack spacing={3}>
 								<TextField select fullWidth label="Location" variant="outlined" defaultValue="1">
-									<MenuItem value="1">CDMX </MenuItem>
+									<MenuItem value="1">United States </MenuItem>
 									<MenuItem value="2">India </MenuItem>
 									<MenuItem value="3">Africa</MenuItem>
 									<MenuItem value="4">New York</MenuItem>
@@ -75,7 +75,7 @@ function ProfileSection() {
 								multiline
 								minRows={5}
 								label="Bio"
-								defaultValue="I consider myself as a creative, professional and a flexible person. I can adapt with any kind of brief and design style"
+								defaultValue="Enter your description"
 								fullWidth
 							/>
 						</Grid>
