@@ -3,17 +3,20 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import InputAdornment from '@mui/material/InputAdornment';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 function SearchBar({ onSearch, activeFilters, onFilterRemove }) {
   const [query, setQuery] = useState('');
+  const [location, setLocation] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(query);
+    onSearch(query, location);
   };
 
   // Group filters by type to display them nicely
@@ -32,6 +35,8 @@ function SearchBar({ onSearch, activeFilters, onFilterRemove }) {
         return `Salary: ${filter.title}`;
       case 'datePosted':
         return `Posted: ${filter.title}`;
+      case 'location':
+        return `Location: ${filter.title}`;
       default:
         return filter.title;
     }
@@ -46,30 +51,70 @@ function SearchBar({ onSearch, activeFilters, onFilterRemove }) {
           display: 'flex',
           alignItems: 'center',
           width: '100%',
-          maxWidth: '600px',
-          margin: '0 auto'
+          maxWidth: '800px',
+          margin: '0 auto',
+          position: 'relative'
         }}
       >
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Search for job titles..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ mr: 1 }}
-        />
+        <Box sx={{ 
+          display: 'flex', 
+          width: '100%', 
+          border: '1px solid rgba(0, 0, 0, 0.23)', 
+          borderRadius: '4px',
+          overflow: 'hidden'
+        }}>
+          {/* Job Title Search Field */}
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Job title, skills, or company"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+              sx: { borderRadius: 0, borderRight: 0 }
+            }}
+            sx={{ 
+              '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+              flex: 1.5
+            }}
+          />
+          
+          {/* Vertical Divider */}
+          <Divider orientation="vertical" flexItem />
+          
+          {/* Location Search Field */}
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="City, state, or remote"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LocationOnIcon />
+                </InputAdornment>
+              ),
+              sx: { borderRadius: 0 }
+            }}
+            sx={{ 
+              '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+              flex: 1
+            }}
+          />
+        </Box>
+        
         <Button
           type="submit"
           variant="contained"
           color="primary"
           disabled={!query.trim()}
+          sx={{ ml: 1, height: '56px' }}
         >
           Search
         </Button>

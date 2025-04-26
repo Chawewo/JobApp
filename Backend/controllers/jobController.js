@@ -9,8 +9,9 @@ exports.searchJobs = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Search query is required' });
     }
 
-    // Log the search query for debugging
+    // Log the search query and location for debugging
     console.log('Search query:', searchQuery);
+    console.log('Location:', location);
     
     // Create request options
     const options = {
@@ -24,7 +25,7 @@ exports.searchJobs = async (req, res) => {
       }
     };
 
-    // Create payload - format exactly as shown in your example
+    // Create payload with location parameter
     const payload = JSON.stringify({
       "keywords": searchQuery,
       "location": location,
@@ -67,9 +68,11 @@ exports.searchJobs = async (req, res) => {
               company: job.companyName || 'Unknown Company',
               description: job.jobDescription || 'No description available',
               datePosted: job.listedAt ? new Date(job.listedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-              location: job.formattedLocation || 'Remote',
+              location: job.formattedLocation || location || 'Remote',
               employmentType: job.formattedEmploymentStatus || 'Not specified',
-              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#'
+              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#',
+              // Include additional fields from the response
+              ...job
             }));
           
             console.log(`Returning ${formattedJobs.length} jobs`);
@@ -101,9 +104,11 @@ exports.searchJobs = async (req, res) => {
               company: job.companyName || 'Unknown Company',
               description: job.jobDescription || 'No description available',
               datePosted: job.listedAt ? new Date(job.listedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-              location: job.formattedLocation || 'Remote',
+              location: job.formattedLocation || location || 'Remote',
               employmentType: job.formattedEmploymentStatus || 'Not specified',
-              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#'
+              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#',
+              // Include additional fields from the response
+              ...job
             }));
             
             console.log(`Extracted ${formattedJobs.length} jobs from alternative structure`);

@@ -156,23 +156,12 @@ const NAV_LINKS_CONFIG = [
                 id: uuid(),
             },
             {
-                title: 'United States',
-                value: 'United States',
+                title: 'In-Person',
+                value: 'In-Person',
                 filterType: 'location',
                 id: uuid(),
             },
-            {
-                title: 'Spain',
-                value: 'Spain',
-                filterType: 'location',
-                id: uuid(),
-            },
-            {
-                title: 'United Kingdom',
-                value: 'United Kingdom',
-                filterType: 'location',
-                id: uuid(),
-            },
+
         ],
     },
     {

@@ -20,32 +20,35 @@ import Chip from '@mui/material/Chip';
 import Alert from '@mui/material/Alert';
 
 function JobApp() {
-  // Get filters from outlet context
   const { activeFilters, onFilterChange } = useOutletContext();
   
   const [selectedJob, setSelectedJob] = useState(null);
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
   const [allJobs, setAllJobs] = useState([]); // Store all jobs from API
   const [filteredJobs, setFilteredJobs] = useState([]); // Filtered jobs to display
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const fetchJobs = async (query) => {
+  const fetchJobs = async (query, location = '') => {
     if (!query) return;
     
     setLoading(true);
     setError('');
     
     try {
-      console.log('Sending search query:', query);
+      console.log('Sending search query:', query, 'location:', location);
       
       const response = await fetch('http://localhost:5000/api/jobs/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ searchQuery: query }),
+        body: JSON.stringify({ 
+          searchQuery: query,
+          location: location || 'United States' // Default to United States
+        }),
       });
       
       const result = await response.json();
@@ -70,11 +73,26 @@ function JobApp() {
               : Math.floor(Math.random() * 150000) + 50000,
             applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#',
             id: job.id || `job-${Math.random().toString(36).substr(2, 9)}`,
-            ...job, // <-- PUT THIS LAST
+            ...job, // <----- PUT THIS LAST
           };
         });
         
-        
+        if (location) {
+          const locationExists = activeFilters.some(filter => 
+            filter.filterType === 'location' && filter.value === location
+          );
+          
+          if (!locationExists) {
+            const locationFilter = {
+              id: `location-${Math.random().toString(36).substr(2, 9)}`,
+              filterType: 'location',
+              value: location,
+              title: location
+            };
+            
+            onFilterChange([...activeFilters, locationFilter]);
+          }
+        }
 
         setAllJobs(processedJobs);
         applyFilters(processedJobs, activeFilters);
@@ -94,7 +112,6 @@ function JobApp() {
     }
   };
 
-  // Apply filters to jobs
   const applyFilters = (jobs, filters) => {
     if (!filters.length) {
       setFilteredJobs(jobs);
@@ -102,29 +119,23 @@ function JobApp() {
     }
 
     const filtered = jobs.filter(job => {
-      // Check if job passes all active filters
       return filters.every(filter => {
         switch (filter.filterType) {
           case 'salary':
-            console.log("salary")
             const minSalary = parseInt(filter.value, 10);
-          
             return job.salary >= minSalary;
           
           case 'employmentStatus':
-            console.log("2")
             return job.employmentType === filter.value;
           
           case 'experienceLevel':
-            console.log("3")
             return job.experienceLevel.includes(filter.value);
           
           case 'location':
-            console.log("4")
-            return job.location.includes(filter.value);
+            return job.location.toLowerCase().includes(filter.value.toLowerCase()) || 
+                   filter.value.toLowerCase().includes(job.location.toLowerCase());
           
           case 'datePosted':
-            console.log("5")
             if (filter.value === 'any') return true;
             
             const daysAgo = parseInt(filter.value, 10);
@@ -144,13 +155,12 @@ function JobApp() {
     setFilteredJobs(filtered);
   };
 
-  // Handle search submission
-  const handleSearch = (query) => {
+  const handleSearch = (query, location) => {
     setSearchQuery(query);
-    fetchJobs(query);
+    setSearchLocation(location);
+    fetchJobs(query, location);
   };
 
-  // Handle removal of a filter
   const handleFilterRemove = (filter) => {
     if (filter === 'all') {
       onFilterChange([]);
@@ -169,7 +179,6 @@ function JobApp() {
     setOpen(false);
   };
 
-  // Update filtered jobs when active filters change
   useEffect(() => {
     if (allJobs.length > 0) {
       applyFilters(allJobs, activeFilters);
@@ -195,6 +204,13 @@ function JobApp() {
       {activeFilters.length > 0 && filteredJobs.length > 0 && (
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Showing {filteredJobs.length} of {allJobs.length} jobs matching your filters
+        </Typography>
+      )}
+
+      {/* Search location display */}
+      {searchLocation && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Jobs in {searchLocation}
         </Typography>
       )}
 
