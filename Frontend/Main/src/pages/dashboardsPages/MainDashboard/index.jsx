@@ -77,23 +77,9 @@ function JobApp() {
           };
         });
         
-        if (location) {
-          const locationExists = activeFilters.some(filter => 
-            filter.filterType === 'location' && filter.value === location
-          );
-          
-          if (!locationExists) {
-            const locationFilter = {
-              id: `location-${Math.random().toString(36).substr(2, 9)}`,
-              filterType: 'location',
-              value: location,
-              title: location
-            };
-            
-            onFilterChange([...activeFilters, locationFilter]);
-          }
-        }
-
+        // Remove the automatic location filter addition
+        // This was causing the issue with search location being added as a filter
+        
         setAllJobs(processedJobs);
         applyFilters(processedJobs, activeFilters);
       } else {

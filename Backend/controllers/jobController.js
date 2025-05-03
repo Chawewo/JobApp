@@ -3,15 +3,14 @@ const https = require('https');
 
 exports.searchJobs = async (req, res) => {
   try {
-    const { searchQuery, location = "United States", count = 15 } = req.body;
+    const { searchQuery, location = "United States", count = 25 } = req.body;
     
     if (!searchQuery) {
       return res.status(400).json({ success: false, message: 'Search query is required' });
     }
 
-    // Log the search query and location for debugging
+    // Log the search query for debugging
     console.log('Search query:', searchQuery);
-    console.log('Location:', location);
     
     // Create request options
     const options = {
@@ -25,7 +24,7 @@ exports.searchJobs = async (req, res) => {
       }
     };
 
-    // Create payload with location parameter
+    // Create payload - format exactly as shown in your example
     const payload = JSON.stringify({
       "keywords": searchQuery,
       "location": location,
@@ -68,11 +67,9 @@ exports.searchJobs = async (req, res) => {
               company: job.companyName || 'Unknown Company',
               description: job.jobDescription || 'No description available',
               datePosted: job.listedAt ? new Date(job.listedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-              location: job.formattedLocation || location || 'Remote',
+              location: job.formattedLocation || 'Remote',
               employmentType: job.formattedEmploymentStatus || 'Not specified',
-              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#',
-              // Include additional fields from the response
-              ...job
+              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#'
             }));
           
             console.log(`Returning ${formattedJobs.length} jobs`);
@@ -82,18 +79,18 @@ exports.searchJobs = async (req, res) => {
           // If the response structure is different than expected
           else {
             console.log('Unexpected API response structure');
-            // Try to extract jobs from a different structure
+            
             let extractedJobs = [];
             
-            // Handle case where response might be directly an array
+            
             if (Array.isArray(parsedData)) {
               extractedJobs = parsedData;
             } 
-            // Handle case where response might be nested differently
+            
             else if (parsedData.data && Array.isArray(parsedData.data)) {
               extractedJobs = parsedData.data;
             }
-            // Handle case from your example where response might be an array at index 0
+            
             else if (parsedData.response && Array.isArray(parsedData.response[0])) {
               extractedJobs = parsedData.response[0];
             }
@@ -104,11 +101,9 @@ exports.searchJobs = async (req, res) => {
               company: job.companyName || 'Unknown Company',
               description: job.jobDescription || 'No description available',
               datePosted: job.listedAt ? new Date(job.listedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-              location: job.formattedLocation || location || 'Remote',
+              location: job.formattedLocation || 'Remote',
               employmentType: job.formattedEmploymentStatus || 'Not specified',
-              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#',
-              // Include additional fields from the response
-              ...job
+              applyUrl: job.companyApplyUrl || job.jobPostingUrl || '#'
             }));
             
             console.log(`Extracted ${formattedJobs.length} jobs from alternative structure`);
